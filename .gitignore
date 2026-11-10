@@ -1,0 +1,12 @@
+build/
+dist/
+node_modules/
+*.log
+local.properties
+.idea/
+*.keystore
+*.jks
+*.p12
+*.key
+*token*
+lib/config.local.php

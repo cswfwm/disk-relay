@@ -1,0 +1,28 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 真实存在的文件/目录直接返回
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 其余全部交给 index.php
+  RewriteRule ^ index.php [L]
+</IfModule>
+
+# 禁止访问存储目录
+<IfModule mod_authz_core.c>
+  <FilesMatch "\.(json|local\.php)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  <FilesMatch "\.(json|local\.php)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
