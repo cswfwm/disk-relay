@@ -2,14 +2,14 @@
   {
     "网址": "https://litterbox.catbox.moe/resources/internals/api.php",
     "调用方式": "POST multipart/form-data，字段 reqtype=fileupload、time=1h|12h|24h|72h、fileToUpload；响应为纯文本直链",
-    "是否有特殊标记": "无",
+    "是否有特殊标记": "实测从 uuk 主机出口返回 412 Invalid uploader",
     "上传单文件大小": "1 GB",
     "上传总量大小": "无限"
   },
   {
     "网址": "https://uguu.se/upload",
     "调用方式": "POST multipart/form-data，字段 files[]；响应 JSON files[0].url",
-    "是否有特殊标记": "直链域名会变（h. / n. / d.uguu.se）；禁 zip/rar/apk/exe/pdf；文件仅存 3 小时",
+    "是否有特殊标记": "直链域名会变（h./n./d.uguu.se）；禁 zip/rar/apk/exe/pdf；仅存 3 小时",
     "上传单文件大小": "128 MiB",
     "上传总量大小": "无限"
   },
@@ -23,7 +23,7 @@
   {
     "网址": "https://kappa.lol/api/upload",
     "调用方式": "POST multipart/form-data，字段 file；响应 JSON link",
-    "是否有特殊标记": "按内容去重；上限恰好 104857600 B",
+    "是否有特殊标记": "按内容去重；上限恰好 104857600 B；实测 99MB 通过、100MB 失败",
     "上传单文件大小": "100 MiB",
     "上传总量大小": "无限"
   },
@@ -37,15 +37,15 @@
   {
     "网址": "https://stow.im/",
     "调用方式": "POST multipart/form-data，字段 file；响应纯文本直链",
-    "是否有特殊标记": "按内容去重；ShareX 配置见 https://stow.im/?sharex",
-    "上传单文件大小": "未知",
+    "是否有特殊标记": "无；实测上传 55 MB/s，下载 2.9 MB/s",
+    "上传单文件大小": "99 MB",
     "上传总量大小": "无限"
   },
   {
     "网址": "https://share.cyx.su/",
     "调用方式": "POST multipart/form-data，字段 file；响应纯文本直链",
-    "是否有特殊标记": "按内容去重",
-    "上传单文件大小": "未知",
+    "是否有特殊标记": "无；实测下载最快 3.7 MB/s",
+    "上传单文件大小": "99 MB",
     "上传总量大小": "无限"
   },
   {
@@ -72,15 +72,15 @@
   {
     "网址": "https://file2.me/api/upload",
     "调用方式": "POST multipart/form-data，字段 file；响应 JSON",
-    "是否有特殊标记": "直链是 urls.raw（url 与 /f/ 均为网页）；用 /dl/ 会加 Content-Disposition",
-    "上传单文件大小": "未知",
+    "是否有特殊标记": "直链是 urls.raw；实测 20MB 即被拒（413），直链内容不匹配",
+    "上传单文件大小": "20 MB",
     "上传总量大小": "无限"
   },
   {
     "网址": "https://box.juicey.dev/upload",
     "调用方式": "POST multipart/form-data，字段 file；响应 JSON url 或 raw_url",
-    "是否有特殊标记": "无",
-    "上传单文件大小": "未知",
+    "是否有特殊标记": "直链域名为 f.juicey.dev；实测上传 64 MB/s",
+    "上传单文件大小": "99 MB",
     "上传总量大小": "无限"
   },
   {
@@ -100,14 +100,14 @@
   {
     "网址": "https://x0.at/",
     "调用方式": "POST multipart/form-data，字段 file；响应纯文本直链",
-    "是否有特殊标记": "本容器 IP 被封，需经 PHP 中继出口；后缀黑名单 apk/exe/dll/ipa/jar/sh/dat；可按内容去重；保留 3~100 天",
+    "是否有特殊标记": "本容器 IP 被封，需经中继出口；后缀黑名单 apk/exe/dll/ipa/jar/sh/dat；实测 1000MB 通过、1024MB 失败；大文件下载限速严重",
     "上传单文件大小": "1024 MiB",
     "上传总量大小": "无限"
   },
   {
     "网址": "https://pomf.lain.la/upload.php",
     "调用方式": "POST multipart/form-data，字段 files[]；响应 JSON files[0].url",
-    "是否有特殊标记": "直链域名 pomf2.lain.la 在本容器被 DNS 污染，改用 https://pomf.lain.la/f/{id}.{ext} 取回；按内容拦收 zip（PK 魔数），需 gzip 包裹",
+    "是否有特殊标记": "按内容拦收 zip（PK 魔数），需 gzip 包裹；实测 750MB 通过、1024MB 失败；有 429 限流",
     "上传单文件大小": "750 MB",
     "上传总量大小": "无限"
   },
