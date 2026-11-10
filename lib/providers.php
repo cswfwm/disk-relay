@@ -83,6 +83,72 @@ function providers(): array {
                 'rename_ext' => 'tar.gz',
             ],
         ],
+
+        'stow' => [
+            'label' => 'stow.im',
+            'upload' => [
+                'url' => 'https://stow.im/',
+                'field' => 'file',
+                'filename' => null,
+                'mime' => 'application/octet-stream',
+            ],
+            'parse' => 'text',
+            'download' => ['method' => 'GET'],
+            'limits' => ['max_bytes' => 99 * 1024 * 1024, 'keep_days' => 0],
+        ],
+
+        'cyx' => [
+            'label' => 'share.cyx.su',
+            'upload' => [
+                'url' => 'https://share.cyx.su/',
+                'field' => 'file',
+                'filename' => null,
+                'mime' => 'application/octet-stream',
+            ],
+            'parse' => 'text',
+            'download' => ['method' => 'GET'],
+            'limits' => ['max_bytes' => 99 * 1024 * 1024, 'keep_days' => 0],
+        ],
+
+        'juicey' => [
+            'label' => 'juicey.dev',
+            'upload' => [
+                'url' => 'https://box.juicey.dev/upload',
+                'field' => 'file',
+                'filename' => null,
+                'mime' => 'application/octet-stream',
+            ],
+            'parse' => 'juicey',
+            'download' => ['method' => 'GET'],
+            'limits' => ['max_bytes' => 99 * 1024 * 1024, 'keep_days' => 0],
+        ],
+
+        'litterbox' => [
+            'label' => 'litterbox',
+            'upload' => [
+                'url' => 'https://litterbox.catbox.moe/resources/internals/api.php',
+                'field' => 'fileToUpload',
+                'filename' => null,
+                'mime' => 'application/octet-stream',
+                'extra_fields' => ['reqtype' => 'fileupload', 'time' => '72h'],
+            ],
+            'parse' => 'text',
+            'download' => ['method' => 'GET'],
+            'limits' => ['max_bytes' => 1024 * 1024 * 1024, 'keep_days' => 3],
+        ],
+
+        'file2me' => [
+            'label' => 'file2.me',
+            'upload' => [
+                'url' => 'https://file2.me/api/upload',
+                'field' => 'file',
+                'filename' => null,
+                'mime' => 'application/octet-stream',
+            ],
+            'parse' => 'file2me',
+            'download' => ['method' => 'GET'],
+            'limits' => ['max_bytes' => 20 * 1024 * 1024, 'keep_days' => 0],
+        ],
     ];
 }
 
@@ -94,6 +160,21 @@ function parse_link(string $mode, string $body): ?string {
     if ($mode === 'json') {
         $d = json_decode($body, true);
         if (is_array($d) && !empty($d['link'])) return (string)$d['link'];
+        return null;
+    }
+
+    if ($mode === 'juicey') {
+        $d = json_decode($body, true);
+        if (is_array($d)) {
+            if (!empty($d['raw_url'])) return (string)$d['raw_url'];
+            if (!empty($d['url']) && str_starts_with((string)$d['url'], 'http')) return (string)$d['url'];
+        }
+        return null;
+    }
+
+    if ($mode === 'file2me') {
+        $d = json_decode($body, true);
+        if (is_array($d) && !empty($d['urls']['raw'])) return (string)$d['urls']['raw'];
         return null;
     }
 

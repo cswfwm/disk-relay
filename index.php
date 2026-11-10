@@ -4,6 +4,8 @@ declare(strict_types=1);
 require __DIR__ . '/lib/util.php';
 require __DIR__ . '/lib/providers.php';
 require __DIR__ . '/lib/dispatch.php';
+require __DIR__ . '/lib/health.php';
+require __DIR__ . '/lib/page.php';
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $uri    = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
@@ -24,15 +26,57 @@ set_exception_handler(function (Throwable $e) {
     }
 });
 
-// —— 健康检查（不需要鉴权）
-if ($method === 'GET' && ($path === '/api/health' || $path === '/')) {
-    json_out(200, [
+// —— 探活数据（主页与 API 共用）
+function health_payload(): array {
+    $cache = health_cache_load();
+    $items = $cache['items'] ?? [];
+    $summary = ['ok' => 0, 'fail' => 0, 'down' => 0, 'unknown' => 0];
+    foreach ($items as $it) {
+        $v = health_verdict($it);
+        $summary[$v['status']] = ($summary[$v['status']] ?? 0) + 1;
+    }
+    return [
         'ok' => true,
         'service' => 'disk-relay',
         'php' => PHP_VERSION,
-        'providers' => array_keys(providers()),
-        'at' => date('c'),
-    ]);
+        'checked_at' => (int)($cache['at'] ?? 0),
+        'deep' => (bool)($cache['deep'] ?? false),
+        'summary' => $summary,
+        'providers' => $items,
+    ];
+}
+
+$canRefresh = false;
+$wantRefresh = isset($_GET['refresh']);
+if ($wantRefresh) {
+    $want = relay_token();
+    $got  = bearer();
+    $canRefresh = ($want !== '' && $got !== '' && hash_equals($want, $got));
+} else {
+    $want = relay_token();
+    $got  = bearer();
+    $canRefresh = ($want !== '' && $got !== '' && hash_equals($want, $got));
+}
+
+if ($wantRefresh && $canRefresh) {
+    $deep = !isset($_GET['deep']) || (string)$_GET['deep'] !== '0';
+    health_run($deep);
+    if (isset($_GET['api'])) {
+        json_out(200, health_payload());
+    }
+    header('Location: /');
+    exit;
+}
+
+// —— JSON 版探活
+if ($method === 'GET' && $path === '/api/health') {
+    json_out(200, health_payload());
+}
+
+// —— 主页
+if ($method === 'GET' && ($path === '/' || $path === '/index.php')) {
+    render_index(health_cache_load(), $canRefresh);
+    exit;
 }
 
 // —— 后端列表与状态

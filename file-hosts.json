@@ -1,0 +1,121 @@
+[
+  {
+    "网址": "https://litterbox.catbox.moe/resources/internals/api.php",
+    "调用方式": "POST multipart/form-data，字段 reqtype=fileupload、time=1h|12h|24h|72h、fileToUpload；响应为纯文本直链",
+    "是否有特殊标记": "无",
+    "上传单文件大小": "1 GB",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://uguu.se/upload",
+    "调用方式": "POST multipart/form-data，字段 files[]；响应 JSON files[0].url",
+    "是否有特殊标记": "直链域名会变（h. / n. / d.uguu.se）；禁 zip/rar/apk/exe/pdf；文件仅存 3 小时",
+    "上传单文件大小": "128 MiB",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://qu.ax/upload.php",
+    "调用方式": "POST multipart/form-data，字段 files[]；返回 https://qu.ax/{id}",
+    "是否有特殊标记": "需转换：https://qu.ax/{id} → https://qu.ax/x/{id}.{ext}；下载须带 Referer: https://qu.ax/{id}",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://kappa.lol/api/upload",
+    "调用方式": "POST multipart/form-data，字段 file；响应 JSON link",
+    "是否有特殊标记": "按内容去重；上限恰好 104857600 B",
+    "上传单文件大小": "100 MiB",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://616169.xyz/",
+    "调用方式": "POST multipart/form-data，字段 files[]；响应纯文本直链",
+    "是否有特殊标记": "按内容去重",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://stow.im/",
+    "调用方式": "POST multipart/form-data，字段 file；响应纯文本直链",
+    "是否有特殊标记": "按内容去重；ShareX 配置见 https://stow.im/?sharex",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://share.cyx.su/",
+    "调用方式": "POST multipart/form-data，字段 file；响应纯文本直链",
+    "是否有特殊标记": "按内容去重",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://up.anon.cat/upload",
+    "调用方式": "POST multipart/form-data，字段 files[]（或 PUT /upload?filename=x 原始 body）；响应 JSON files[0].url",
+    "是否有特殊标记": "按内容去重；30 天无下载即删；拒绝 apk 后缀",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://put.icu/upload/",
+    "调用方式": "PUT 原始 body，请求头 Accept: application/json；响应 JSON direct_url",
+    "是否有特殊标记": "响应另含 delete_key 用于删除；直链路径为 /s/xxx",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://ul.sto.care/{filename}",
+    "调用方式": "PUT 原始 body 到 https://ul.sto.care/{filename}（或 POST 到 https://ul.sto.care）；响应 JSON url",
+    "是否有特殊标记": "72 小时过期；每 IP 每天 100 次；直链域名为 trystocare.com",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://file2.me/api/upload",
+    "调用方式": "POST multipart/form-data，字段 file；响应 JSON",
+    "是否有特殊标记": "直链是 urls.raw（url 与 /f/ 均为网页）；用 /dl/ 会加 Content-Disposition",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://box.juicey.dev/upload",
+    "调用方式": "POST multipart/form-data，字段 file；响应 JSON url 或 raw_url",
+    "是否有特殊标记": "无",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://curl.by",
+    "调用方式": "POST multipart/form-data，字段 file；响应含 https://curl.by/{id}/{name}",
+    "是否有特殊标记": "无",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://frisk.page/api/files/upload",
+    "调用方式": "POST multipart/form-data，字段 file；返回 202 + job_id",
+    "是否有特殊标记": "异步两步：再 GET https://frisk.page/api/files/upload-jobs/{job_id} 取 upload.file_url",
+    "上传单文件大小": "未知",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://x0.at/",
+    "调用方式": "POST multipart/form-data，字段 file；响应纯文本直链",
+    "是否有特殊标记": "本容器 IP 被封，需经 PHP 中继出口；后缀黑名单 apk/exe/dll/ipa/jar/sh/dat；可按内容去重；保留 3~100 天",
+    "上传单文件大小": "1024 MiB",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://pomf.lain.la/upload.php",
+    "调用方式": "POST multipart/form-data，字段 files[]；响应 JSON files[0].url",
+    "是否有特殊标记": "直链域名 pomf2.lain.la 在本容器被 DNS 污染，改用 https://pomf.lain.la/f/{id}.{ext} 取回；按内容拦收 zip（PK 魔数），需 gzip 包裹",
+    "上传单文件大小": "750 MB",
+    "上传总量大小": "无限"
+  },
+  {
+    "网址": "https://catbox.moe/user/api.php",
+    "调用方式": "POST multipart/form-data，字段 reqtype=fileupload、fileToUpload",
+    "是否有特殊标记": "本容器与 uuk 出口均返回 412 Invalid uploader，需登录态才可用",
+    "上传单文件大小": "200 MB",
+    "上传总量大小": "无限"
+  }
+]

@@ -132,11 +132,13 @@ function upload_one(string $name, array $p, string $path, string $origName, int 
         $wrapped = true;
     }
 
-    $res = http_post_retry($up['url'], [
-        CURLOPT_POSTFIELDS => [
-            $up['field'] => new CURLFile($sendPath, $up['mime'], $sendName),
-        ],
-    ], 300);
+    $post = [];
+    foreach (($up['extra_fields'] ?? []) as $k => $v) {
+        $post[$k] = $v;   // 额外字段要先于文件
+    }
+    $post[$up['field']] = new CURLFile($sendPath, $up['mime'], $sendName);
+
+    $res = http_post_retry($up['url'], [CURLOPT_POSTFIELDS => $post], 300);
 
     if ($wrapped) @unlink($sendPath);
 
